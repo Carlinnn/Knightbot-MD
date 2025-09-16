@@ -24,7 +24,7 @@ async function videoCommand(sock, chatId, message) {
         
         
         if (!searchQuery) {
-            await sock.sendMessage(chatId, { text: 'What video do you want to download?' }, { quoted: message });
+            await sock.sendMessage(chatId, { text: 'Qual vídeo você deseja baixar?' }, { quoted: message });
             return;
         }
 
@@ -38,7 +38,7 @@ async function videoCommand(sock, chatId, message) {
             // Search YouTube for the video
             const { videos } = await yts(searchQuery);
             if (!videos || videos.length === 0) {
-                await sock.sendMessage(chatId, { text: 'No videos found!' }, { quoted: message });
+                await sock.sendMessage(chatId, { text: 'Nenhum vídeo encontrado!' }, { quoted: message });
                 return;
             }
             videoUrl = videos[0].url;
@@ -54,7 +54,7 @@ async function videoCommand(sock, chatId, message) {
             if (thumb) {
                 await sock.sendMessage(chatId, {
                     image: { url: thumb },
-                    caption: `*${captionTitle}*\nDownloading...`
+                    caption: `*${captionTitle}*\nBaixando...`
                 }, { quoted: message });
             }
         } catch (e) { console.error('[VIDEO] thumb error:', e?.message || e); }
@@ -63,7 +63,7 @@ async function videoCommand(sock, chatId, message) {
         // Validate YouTube URL
         let urls = videoUrl.match(/(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch\?v=|v\/|embed\/|shorts\/|playlist\?list=)?)([a-zA-Z0-9_-]{11})/gi);
         if (!urls) {
-            await sock.sendMessage(chatId, { text: 'This is not a valid YouTube link!' }, { quoted: message });
+            await sock.sendMessage(chatId, { text: 'Este não é um link válido do YouTube!' }, { quoted: message });
             return;
         }
 
@@ -74,14 +74,14 @@ async function videoCommand(sock, chatId, message) {
             const meta = await princeVideoApi.fetchMeta(videoUrl);
             if (meta?.success && meta?.result?.download_url) {
                 videoDownloadUrl = meta.result.download_url;
-                title = meta.result.title || 'video';
+                title = meta.result.title || 'vídeo';
             } else {
-                await sock.sendMessage(chatId, { text: 'Failed to fetch video from the API.' }, { quoted: message });
+                await sock.sendMessage(chatId, { text: 'Falha ao buscar o vídeo na API.' }, { quoted: message });
                 return;
             }
         } catch (e) {
             console.error('[VIDEO] prince api error:', e?.message || e);
-            await sock.sendMessage(chatId, { text: 'Failed to fetch video from the API.' }, { quoted: message });
+            await sock.sendMessage(chatId, { text: 'Falha ao buscar o vídeo na API.' }, { quoted: message });
             return;
         }
         const filename = `${title}.mp4`;
@@ -122,7 +122,7 @@ async function videoCommand(sock, chatId, message) {
                 // try alternate URL pattern as best-effort
                 download403 = true;
             } else {
-                await sock.sendMessage(chatId, { text: 'Failed to download the video file.' }, { quoted: message });
+                await sock.sendMessage(chatId, { text: 'Falha ao baixar o arquivo de vídeo.' }, { quoted: message });
                 return;
             }
         }
@@ -139,12 +139,12 @@ async function videoCommand(sock, chatId, message) {
                 });
                 buffer = Buffer.from(videoRes.data);
             } catch (err2) {
-                await sock.sendMessage(chatId, { text: 'Failed to download the video file from alternate CDN.' }, { quoted: message });
+                await sock.sendMessage(chatId, { text: 'Falha ao baixar o vídeo de outro servidor (CDN).' }, { quoted: message });
                 return;
             }
         }
         if (!buffer || buffer.length < 1024) {
-            await sock.sendMessage(chatId, { text: 'Downloaded file is empty or too small.' }, { quoted: message });
+            await sock.sendMessage(chatId, { text: 'O arquivo baixado está vazio ou muito pequeno.' }, { quoted: message });
             return;
         }
         
@@ -154,13 +154,13 @@ async function videoCommand(sock, chatId, message) {
             await execPromise(`ffmpeg -i "${tempFile}" -c:v libx264 -c:a aac -preset veryfast -crf 26 -movflags +faststart "${convertedFile}"`);
             // Check if conversion was successful
             if (!fs.existsSync(convertedFile)) {
-                await sock.sendMessage(chatId, { text: 'Converted file missing.' }, { quoted: message });
+                await sock.sendMessage(chatId, { text: 'Arquivo convertido não encontrado.' }, { quoted: message });
                 return;
             }
             const stats = fs.statSync(convertedFile);
             const maxSize = 62 * 1024 * 1024; // 62MB
             if (stats.size > maxSize) {
-                await sock.sendMessage(chatId, { text: 'Video is too large to send on WhatsApp.' }, { quoted: message });
+                await sock.sendMessage(chatId, { text: 'O vídeo é muito grande para ser enviado no WhatsApp.' }, { quoted: message });
                 return;
             }
             // Try sending the converted video
@@ -186,13 +186,13 @@ async function videoCommand(sock, chatId, message) {
             console.error('[VIDEO] conversion failed, trying original file:', conversionError?.message || conversionError);
             try {
                 if (!fs.existsSync(tempFile)) {
-                    await sock.sendMessage(chatId, { text: 'Temp file missing.' }, { quoted: message });
+                    await sock.sendMessage(chatId, { text: 'Arquivo temporário não encontrado.' }, { quoted: message });
                     return;
                 }
                 const origStats = fs.statSync(tempFile);
                 const maxSize = 62 * 1024 * 1024; // 62MB
                 if (origStats.size > maxSize) {
-                    await sock.sendMessage(chatId, { text: 'Video is too large to send on WhatsApp.' }, { quoted: message });
+                    await sock.sendMessage(chatId, { text: 'O vídeo é muito grande para ser enviado no WhatsApp.' }, { quoted: message });
                     return;
                 }
             } catch {}
@@ -233,7 +233,7 @@ async function videoCommand(sock, chatId, message) {
 
     } catch (error) {
         console.error('[VIDEO] Command Error:', error?.message || error);
-        await sock.sendMessage(chatId, { text: 'Download failed: ' + (error?.message || 'Unknown error') }, { quoted: message });
+    await sock.sendMessage(chatId, { text: 'Falha no download: ' + (error?.message || 'Erro desconhecido') }, { quoted: message });
     }
 }
 

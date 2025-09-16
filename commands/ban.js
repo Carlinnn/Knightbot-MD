@@ -15,7 +15,7 @@ async function banCommand(sock, chatId, message) {
     
     if (!userToBan) {
         await sock.sendMessage(chatId, { 
-            text: 'Please mention the user or reply to their message to ban!', 
+            text: 'Por favor, mencione o usuário ou responda à mensagem dele para banir!', 
             ...channelInfo 
         });
         return;
@@ -29,20 +29,20 @@ async function banCommand(sock, chatId, message) {
             fs.writeFileSync('./data/banned.json', JSON.stringify(bannedUsers, null, 2));
             
             await sock.sendMessage(chatId, { 
-                text: `Successfully banned @${userToBan.split('@')[0]}!`,
+                text: `@${userToBan.split('@')[0]} banido com sucesso!`,
                 mentions: [userToBan],
                 ...channelInfo 
             });
         } else {
             await sock.sendMessage(chatId, { 
-                text: `${userToBan.split('@')[0]} is already banned!`,
+                text: `${userToBan.split('@')[0]} já está banido!`,
                 mentions: [userToBan],
                 ...channelInfo 
             });
         }
     } catch (error) {
-        console.error('Error in ban command:', error);
-        await sock.sendMessage(chatId, { text: 'Failed to ban user!', ...channelInfo });
+        console.error('Erro no comando ban:', error);
+        await sock.sendMessage(chatId, { text: 'Falha ao banir o usuário!', ...channelInfo });
     }
 }
 

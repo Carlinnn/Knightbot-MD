@@ -71,7 +71,7 @@ async function handleChatbotCommand(sock, chatId, message, match) {
     if (!match) {
         await showTyping(sock, chatId);
         return sock.sendMessage(chatId, {
-            text: `*CHATBOT SETUP*\n\n*.chatbot on*\nEnable chatbot\n\n*.chatbot off*\nDisable chatbot in this group`,
+            text: `*CONFIGURAÇÃO DO CHATBOT*\n\n*.chatbot on*\nAtivar chatbot\n\n*.chatbot off*\nDesativar chatbot neste grupo`,
             quoted: message
         });
     }
@@ -91,7 +91,7 @@ async function handleChatbotCommand(sock, chatId, message, match) {
             await showTyping(sock, chatId);
             if (data.chatbot[chatId]) {
                 return sock.sendMessage(chatId, { 
-                    text: '*Chatbot is already enabled for this group*',
+                    text: '*O chatbot já está ativado para este grupo*',
                     quoted: message
                 });
             }
@@ -99,7 +99,7 @@ async function handleChatbotCommand(sock, chatId, message, match) {
             saveUserGroupData(data);
             console.log(`✅ Chatbot enabled for group ${chatId}`);
             return sock.sendMessage(chatId, { 
-                text: '*Chatbot has been enabled for this group*',
+                text: '*O chatbot foi ativado para este grupo*',
                 quoted: message
             });
         }
@@ -108,7 +108,7 @@ async function handleChatbotCommand(sock, chatId, message, match) {
             await showTyping(sock, chatId);
             if (!data.chatbot[chatId]) {
                 return sock.sendMessage(chatId, { 
-                    text: '*Chatbot is already disabled for this group*',
+                    text: '*O chatbot já está desativado para este grupo*',
                     quoted: message
                 });
             }
@@ -116,7 +116,7 @@ async function handleChatbotCommand(sock, chatId, message, match) {
             saveUserGroupData(data);
             console.log(`✅ Chatbot disabled for group ${chatId}`);
             return sock.sendMessage(chatId, { 
-                text: '*Chatbot has been disabled for this group*',
+                text: '*O chatbot foi desativado para este grupo*',
                 quoted: message
             });
         }
@@ -136,7 +136,7 @@ async function handleChatbotCommand(sock, chatId, message, match) {
     if (!isAdmin && !isOwner) {
         await showTyping(sock, chatId);
         return sock.sendMessage(chatId, {
-            text: '❌ Only group admins or the bot owner can use this command.',
+            text: '❌ Apenas administradores do grupo ou o dono do bot podem usar este comando.',
             quoted: message
         });
     }
@@ -145,15 +145,15 @@ async function handleChatbotCommand(sock, chatId, message, match) {
         await showTyping(sock, chatId);
         if (data.chatbot[chatId]) {
             return sock.sendMessage(chatId, { 
-                text: '*Chatbot is already enabled for this group*',
+                text: '*O chatbot já está ativado para este grupo*',
                 quoted: message
             });
         }
         data.chatbot[chatId] = true;
         saveUserGroupData(data);
-        console.log(`✅ Chatbot enabled for group ${chatId}`);
+        console.log(`✅ Chatbot ativado para o grupo ${chatId}`);
         return sock.sendMessage(chatId, { 
-            text: '*Chatbot has been enabled for this group*',
+            text: '*O chatbot foi ativado para este grupo*',
             quoted: message
         });
     }
@@ -162,22 +162,22 @@ async function handleChatbotCommand(sock, chatId, message, match) {
         await showTyping(sock, chatId);
         if (!data.chatbot[chatId]) {
             return sock.sendMessage(chatId, { 
-                text: '*Chatbot is already disabled for this group*',
+                text: '*O chatbot já está desativado para este grupo*',
                 quoted: message
             });
         }
         delete data.chatbot[chatId];
         saveUserGroupData(data);
-        console.log(`✅ Chatbot disabled for group ${chatId}`);
+        console.log(`✅ Chatbot desativado para o grupo ${chatId}`);
         return sock.sendMessage(chatId, { 
-            text: '*Chatbot has been disabled for this group*',
+            text: '*O chatbot foi desativado para este grupo*',
             quoted: message
         });
     }
 
     await showTyping(sock, chatId);
     return sock.sendMessage(chatId, { 
-        text: '*Invalid command. Use .chatbot to see usage*',
+        text: '*Comando inválido. Use .chatbot para ver como usar*',
         quoted: message
     });
 }
@@ -252,7 +252,7 @@ async function handleChatbotResponse(sock, chatId, message, userMessage, senderI
 
         if (!response) {
             await sock.sendMessage(chatId, { 
-                text: "Hmm, let me think about that... 🤔\nI'm having trouble processing your request right now.",
+                text: "Hmm, deixe-me pensar sobre isso... 🤔\nEstou com dificuldades para processar sua solicitação agora.",
                 quoted: message
             });
             return;
@@ -269,9 +269,9 @@ async function handleChatbotResponse(sock, chatId, message, userMessage, senderI
         });
 
     } catch (error) {
-        console.error('❌ Error in chatbot response:', error.message);
+        console.error('❌ Erro na resposta do chatbot:', error.message);
         await sock.sendMessage(chatId, { 
-            text: "Oops! 😅 I got a bit confused there. Could you try asking that again?",
+            text: "Opa! 😅 Fiquei um pouco confuso aqui. Você pode tentar perguntar novamente?",
             quoted: message
         });
     }

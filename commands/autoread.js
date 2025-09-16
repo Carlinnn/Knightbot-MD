@@ -23,7 +23,7 @@ async function autoreadCommand(sock, chatId, message) {
         // Check if sender is the owner (bot itself)
         if (!message.key.fromMe) {
             await sock.sendMessage(chatId, {
-                text: '❌ This command is only available for the owner!',
+                text: '❌ Este comando está disponível apenas para o dono!',
                 contextInfo: {
                     forwardingScore: 1,
                     isForwarded: true,
@@ -54,7 +54,7 @@ async function autoreadCommand(sock, chatId, message) {
                 config.enabled = false;
             } else {
                 await sock.sendMessage(chatId, {
-                    text: '❌ Invalid option! Use: .autoread on/off',
+                    text: '❌ Opção inválida! Use: .autoread on/off',
                     contextInfo: {
                         forwardingScore: 1,
                         isForwarded: true,
@@ -77,7 +77,7 @@ async function autoreadCommand(sock, chatId, message) {
         
         // Send confirmation message
         await sock.sendMessage(chatId, {
-            text: `✅ Auto-read has been ${config.enabled ? 'enabled' : 'disabled'}!`,
+            text: `✅ Auto-leitura foi ${config.enabled ? 'ativada' : 'desativada'}!`,
             contextInfo: {
                 forwardingScore: 1,
                 isForwarded: true,
@@ -92,7 +92,7 @@ async function autoreadCommand(sock, chatId, message) {
     } catch (error) {
         console.error('Error in autoread command:', error);
         await sock.sendMessage(chatId, {
-            text: '❌ Error processing command!',
+            text: '❌ Erro ao processar o comando!',
             contextInfo: {
                 forwardingScore: 1,
                 isForwarded: true,

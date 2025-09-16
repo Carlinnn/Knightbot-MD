@@ -52,7 +52,7 @@ async function clearTmpCommand(sock, chatId, msg) {
         const isOwner = msg.key.fromMe;
         if (!isOwner) {
             await sock.sendMessage(chatId, { 
-                text: '❌ This command is only available for the owner!' 
+                text: '❌ Este comando está disponível apenas para o dono!' 
             });
             return;
         }
@@ -61,18 +61,18 @@ async function clearTmpCommand(sock, chatId, msg) {
         
         if (result.success) {
             await sock.sendMessage(chatId, { 
-                text: `✅ ${result.message}` 
+                text: `✅ ${result.message.replace('Cleared', 'Limpou').replace('files in', 'arquivos em').replace('Failed to clear files in', 'Falha ao limpar arquivos em')}` 
             });
         } else {
             await sock.sendMessage(chatId, { 
-                text: `❌ ${result.message}` 
+                text: `❌ ${result.message.replace('Cleared', 'Limpou').replace('files in', 'arquivos em').replace('Failed to clear files in', 'Falha ao limpar arquivos em')}` 
             });
         }
 
     } catch (error) {
-        console.error('Error in cleartmp command:', error);
+        console.error('Erro no comando cleartmp:', error);
         await sock.sendMessage(chatId, { 
-            text: '❌ Failed to clear temporary files!' 
+            text: '❌ Falha ao limpar arquivos temporários!' 
         });
     }
 }

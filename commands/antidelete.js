@@ -75,14 +75,14 @@ function saveAntideleteConfig(config) {
 // Command Handler
 async function handleAntideleteCommand(sock, chatId, message, match) {
     if (!message.key.fromMe) {
-        return sock.sendMessage(chatId, { text: '*Only the bot owner can use this command.*' }, { quoted: message });
+        return sock.sendMessage(chatId, { text: '*Apenas o dono do bot pode usar este comando.*' }, { quoted: message });
     }
 
     const config = loadAntideleteConfig();
 
     if (!match) {
         return sock.sendMessage(chatId, {
-            text: `*ANTIDELETE SETUP*\n\nCurrent Status: ${config.enabled ? '✅ Enabled' : '❌ Disabled'}\n\n*.antidelete on* - Enable\n*.antidelete off* - Disable`
+            text: `*CONFIGURAÇÃO ANTIDELETE*\n\nStatus Atual: ${config.enabled ? '✅ Ativado' : '❌ Desativado'}\n\n*.antidelete on* - Ativar\n*.antidelete off* - Desativar`
         }, {quoted: message});
     }
 
@@ -91,11 +91,11 @@ async function handleAntideleteCommand(sock, chatId, message, match) {
     } else if (match === 'off') {
         config.enabled = false;
     } else {
-        return sock.sendMessage(chatId, { text: '*Invalid command. Use .antidelete to see usage.*' }, {quoted:message});
+        return sock.sendMessage(chatId, { text: '*Comando inválido. Use .antidelete para ver o uso.*' }, {quoted:message});
     }
 
     saveAntideleteConfig(config);
-    return sock.sendMessage(chatId, { text: `*Antidelete ${match === 'on' ? 'enabled' : 'disabled'}*` }, {quoted:message});
+    return sock.sendMessage(chatId, { text: `*Antidelete ${match === 'on' ? 'ativado' : 'desativado'}*` }, {quoted:message});
 }
 
 // Store incoming messages
@@ -176,16 +176,16 @@ async function handleMessageRevocation(sock, revocationMessage) {
             day: '2-digit', month: '2-digit', year: 'numeric'
         });
 
-        let text = `*🔰 ANTIDELETE REPORT 🔰*\n\n` +
-            `*🗑️ Deleted By:* @${deletedBy.split('@')[0]}\n` +
-            `*👤 Sender:* @${senderName}\n` +
-            `*📱 Number:* ${sender}\n` +
-            `*🕒 Time:* ${time}\n`;
+        let text = `*🔰 RELATÓRIO ANTIDELETE 🔰*\n\n` +
+            `*🗑️ Apagado por:* @${deletedBy.split('@')[0]}\n` +
+            `*👤 Remetente:* @${senderName}\n` +
+            `*📱 Número:* ${sender}\n` +
+            `*🕒 Horário:* ${time}\n`;
 
-        if (groupName) text += `*👥 Group:* ${groupName}\n`;
+        if (groupName) text += `*👥 Grupo:* ${groupName}\n`;
 
         if (original.content) {
-            text += `\n*💬 Deleted Message:*\n${original.content}`;
+            text += `\n*💬 Mensagem apagada:*\n${original.content}`;
         }
 
         await sock.sendMessage(ownerNumber, {
@@ -196,7 +196,7 @@ async function handleMessageRevocation(sock, revocationMessage) {
         // Media sending
         if (original.mediaType && fs.existsSync(original.mediaPath)) {
             const mediaOptions = {
-                caption: `*Deleted ${original.mediaType}*\nFrom: @${senderName}`,
+                caption: `*${original.mediaType === 'image' ? 'Imagem' : original.mediaType === 'sticker' ? 'Figurinha' : 'Vídeo'} apagado(a)*\nDe: @${senderName}`,
                 mentions: [sender]
             };
 
@@ -223,7 +223,7 @@ async function handleMessageRevocation(sock, revocationMessage) {
                 }
             } catch (err) {
                 await sock.sendMessage(ownerNumber, {
-                    text: `⚠️ Error sending media: ${err.message}`
+                    text: `⚠️ Erro ao enviar mídia: ${err.message}`
                 });
             }
 

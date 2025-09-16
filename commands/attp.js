@@ -8,7 +8,7 @@ async function attpCommand(sock, chatId, message) {
     const text = userMessage.split(' ').slice(1).join(' ');
 
     if (!text) {
-        await sock.sendMessage(chatId, { text: 'Please provide text after the .attp command.' }, { quoted: message });
+        await sock.sendMessage(chatId, { text: 'Por favor, forneça um texto após o comando .attp.' }, { quoted: message });
         return;
     }
 
@@ -19,8 +19,8 @@ async function attpCommand(sock, chatId, message) {
         try { fs.unlinkSync(webpPath) } catch (_) {}
         await sock.sendMessage(chatId, { sticker: webpBuffer }, { quoted: message });
     } catch (error) {
-        console.error('Error generating local sticker:', error);
-        await sock.sendMessage(chatId, { text: 'Failed to generate the sticker locally.' }, { quoted: message });
+        console.error('Erro ao gerar figurinha local:', error);
+        await sock.sendMessage(chatId, { text: 'Falha ao gerar a figurinha localmente.' }, { quoted: message });
     }
 }
 
